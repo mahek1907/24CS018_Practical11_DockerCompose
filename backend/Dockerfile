@@ -2,7 +2,7 @@
 # Backend Dockerfile for Practical 11: Task Management API
 # Node.js 18 on Alpine Linux for minimal image size and fast build
 # ==============================================================================
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Set working directory inside container
 WORKDIR /app
