@@ -1,0 +1,17 @@
+$kind: http-request
+name: 3. POST /tasks (Triggers task-created Event)
+url: http://localhost:5000/tasks
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{jwt_token}}
+body:
+  type: text
+  content: |-
+    {
+      "title": "Complete Practical 10",
+      "description": "Demonstrate asynchronous event handling with EventEmitter",
+      "completed": false,
+      "assignedUser": "Mahek"
+    }
+order: 3000

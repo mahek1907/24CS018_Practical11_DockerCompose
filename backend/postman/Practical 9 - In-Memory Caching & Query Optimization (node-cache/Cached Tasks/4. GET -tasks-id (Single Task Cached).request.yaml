@@ -1,0 +1,10 @@
+$kind: http-request
+name: 4. GET /tasks/:id (Single Task Cached)
+description: Separate single-task cache entry.
+url: "{{base_url}}/tasks/{{task_id}}"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt_token}}"
+order: 2000

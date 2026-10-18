@@ -1,0 +1,15 @@
+$kind: http-request
+name: 6. PUT /tasks/:id (Update Task)
+url: http://localhost:5000/tasks/{{task_id}}
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{jwt_token}}
+body:
+  type: text
+  content: |-
+    {
+      "title": "Complete Practical 10 - Updated",
+      "completed": true
+    }
+order: 6000

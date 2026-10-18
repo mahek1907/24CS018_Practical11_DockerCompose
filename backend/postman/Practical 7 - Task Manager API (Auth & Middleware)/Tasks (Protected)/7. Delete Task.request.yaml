@@ -1,0 +1,9 @@
+$kind: http-request
+description: Deletes a task owned by the user.
+url: "{{base_url}}/tasks/{{task_id}}"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt_token}}"
+order: 4000

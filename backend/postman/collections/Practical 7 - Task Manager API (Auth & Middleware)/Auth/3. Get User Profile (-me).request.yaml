@@ -1,0 +1,10 @@
+$kind: http-request
+name: 3. Get User Profile (/me)
+description: Protected route returning the logged-in user's safe identity.
+url: "{{base_url}}/me"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt_token}}"
+order: 3000

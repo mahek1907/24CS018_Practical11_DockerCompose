@@ -1,0 +1,5 @@
+$kind: http-request
+name: 8. GET /debug/cache-stats (Verify Cache Integrity)
+url: http://localhost:5000/debug/cache-stats
+method: GET
+order: 8000

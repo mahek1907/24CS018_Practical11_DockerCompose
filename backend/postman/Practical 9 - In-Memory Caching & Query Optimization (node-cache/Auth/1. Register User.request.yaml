@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{base_url}}/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+        "email": "caching_student@charusat.edu",
+        "password": "SecurePass123!"
+    }
+order: 1000

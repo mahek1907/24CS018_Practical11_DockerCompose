@@ -1,0 +1,7 @@
+$kind: http-request
+name: 5. GET /tasks/:id (Fetch Single Task)
+url: http://localhost:5000/tasks/{{task_id}}
+method: GET
+headers:
+  Authorization: Bearer {{jwt_token}}
+order: 5000

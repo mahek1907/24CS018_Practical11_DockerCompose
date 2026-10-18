@@ -1,0 +1,7 @@
+$kind: http-request
+name: 4. GET /tasks (Fetch All Tasks - Caching Enabled)
+url: http://localhost:5000/tasks
+method: GET
+headers:
+  Authorization: Bearer {{jwt_token}}
+order: 4000

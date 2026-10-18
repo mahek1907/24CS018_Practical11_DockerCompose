@@ -1,0 +1,13 @@
+$kind: http-request
+url: http://localhost:5000/login
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "email": "mahek.student@charusat.edu",
+      "password": "Password123!"
+    }
+order: 2000

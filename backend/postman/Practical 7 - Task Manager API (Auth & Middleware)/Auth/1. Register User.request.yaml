@@ -1,0 +1,14 @@
+$kind: http-request
+description: Registers a new user with email and hashed password (bcrypt 10 rounds).
+url: "{{base_url}}/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+        "email": "student@charusat.edu",
+        "password": "SecurePass123!"
+    }
+order: 1000

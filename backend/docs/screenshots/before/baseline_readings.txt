@@ -1,0 +1,6 @@
+Test: GET /tasks without caching
+Reading 1: 10.14 ms
+Reading 2: 5.31 ms
+Reading 3: 5.25 ms
+Average: 6.90 ms
+Timestamp: 2026-10-17T13:43:19.959Z

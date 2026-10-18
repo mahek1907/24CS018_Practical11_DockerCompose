@@ -1,0 +1,10 @@
+$kind: http-request
+name: 3. GET /tasks (Cached)
+description: First call causes a Cache MISS. Subsequent calls return cached tasks in <3ms (Cache HIT).
+url: "{{base_url}}/tasks"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt_token}}"
+order: 1000

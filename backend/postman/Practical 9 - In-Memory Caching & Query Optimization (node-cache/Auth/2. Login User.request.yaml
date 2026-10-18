@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{base_url}}/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+        "email": "caching_student@charusat.edu",
+        "password": "SecurePass123!"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const jsonData = pm.response.json();
+      if (jsonData.token) {
+          pm.collectionVariables.set('jwt_token', jsonData.token);
+      }
+    language: text/javascript
+order: 2000

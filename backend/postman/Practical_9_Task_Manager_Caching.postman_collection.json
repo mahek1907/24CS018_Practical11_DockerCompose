@@ -1,0 +1,299 @@
+{
+	"info": {
+		"_postman_id": "practical-9-taskmanager-caching-2026",
+		"name": "Practical 9 - In-Memory Caching & Query Optimization (node-cache)",
+		"description": "Postman Collection for Practical 9: In-Memory Caching with node-cache, Cache Invalidation on write, Single-Task Caching, and Cache Metrics (/debug/cache-stats).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "task_id",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "1. Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"caching_student@charusat.edu\",\n    \"password\": \"SecurePass123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.collectionVariables.set('jwt_token', jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"caching_student@charusat.edu\",\n    \"password\": \"SecurePass123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cached Tasks",
+			"item": [
+				{
+					"name": "3. GET /tasks (Cached)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks"
+							]
+						},
+						"description": "First call causes a Cache MISS. Subsequent calls return cached tasks in <3ms (Cache HIT)."
+					},
+					"response": []
+				},
+				{
+					"name": "4. GET /tasks/:id (Single Task Cached)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/tasks/{{task_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"{{task_id}}"
+							]
+						},
+						"description": "Separate single-task cache entry."
+					},
+					"response": []
+				},
+				{
+					"name": "5. POST /tasks (Creates task & Invalidates List Cache)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"if (jsonData.task && jsonData.task._id) {",
+									"    pm.collectionVariables.set('task_id', jsonData.task._id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Implement Caching in Production\",\n    \"description\": \"Using node-cache for high-throughput reads\",\n    \"completed\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6. PUT /tasks/:id (Updates task & Invalidates List + Item Cache)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Implement Caching in Production - COMPLETED\",\n    \"completed\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/{{task_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"{{task_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "7. DELETE /tasks/:id (Deletes task & Invalidates List + Item Cache)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/tasks/{{task_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"{{task_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cache Debug",
+			"item": [
+				{
+					"name": "8. GET /debug/cache-stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/debug/cache-stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"debug",
+								"cache-stats"
+							]
+						},
+						"description": "Returns hits, misses, total requests, hit rate %, and active cache keys."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

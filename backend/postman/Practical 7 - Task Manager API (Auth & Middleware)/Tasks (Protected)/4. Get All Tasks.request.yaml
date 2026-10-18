@@ -1,0 +1,9 @@
+$kind: http-request
+description: Fetches all tasks belonging to the authenticated user.
+url: "{{base_url}}/tasks"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt_token}}"
+order: 1000

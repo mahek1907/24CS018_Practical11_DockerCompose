@@ -1,0 +1,6 @@
+$kind: http-request
+name: 8. GET /debug/cache-stats
+description: Returns hits, misses, total requests, hit rate %, and active cache keys.
+url: "{{base_url}}/debug/cache-stats"
+method: GET
+order: 1000

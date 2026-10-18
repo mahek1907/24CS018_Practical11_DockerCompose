@@ -1,0 +1,15 @@
+# Use this workspace to collaborate
+workspace:
+  id: ""
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ../postman/collections/24CS018_Practical10_EventDrivenArchitecture: b1f78d83-f042-4fdf-84b7-10ea956ba62d
+
+# All resources in the `postman/` folder are automatically registered in Local View.
+# Point to additional files outside the `postman/` folder to register them individually. Example:
+#localResources:
+#  collections:
+#    - ../tests/E2E Test Collection/

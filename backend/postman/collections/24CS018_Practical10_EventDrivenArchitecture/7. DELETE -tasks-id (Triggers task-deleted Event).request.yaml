@@ -1,0 +1,7 @@
+$kind: http-request
+name: 7. DELETE /tasks/:id (Triggers task-deleted Event)
+url: http://localhost:5000/tasks/{{task_id}}
+method: DELETE
+headers:
+  Authorization: Bearer {{jwt_token}}
+order: 7000

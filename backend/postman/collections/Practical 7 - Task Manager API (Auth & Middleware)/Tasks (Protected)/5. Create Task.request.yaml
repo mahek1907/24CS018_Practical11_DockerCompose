@@ -1,0 +1,27 @@
+$kind: http-request
+description: Creates a task with user ownership.
+url: "{{base_url}}/tasks"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+        "title": "Complete Practical 7 Submission",
+        "description": "Write report and test viva questions",
+        "completed": false
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt_token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      const jsonData = pm.response.json();
+      if (jsonData.task && jsonData.task._id) {
+          pm.collectionVariables.set('task_id', jsonData.task._id);
+      }
+    language: text/javascript
+order: 2000

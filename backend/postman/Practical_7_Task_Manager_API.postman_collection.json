@@ -1,0 +1,280 @@
+{
+	"info": {
+		"_postman_id": "practical-7-taskmanager-collection-2026",
+		"name": "Practical 7 - Task Manager API (Auth & Middleware)",
+		"description": "Postman Collection for Practical 7: Authentication, JWT tokens, Middleware Pipeline, and Protected Task CRUD.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "task_id",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "1. Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"student@charusat.edu\",\n    \"password\": \"SecurePass123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register"
+							]
+						},
+						"description": "Registers a new user with email and hashed password (bcrypt 10 rounds)."
+					},
+					"response": []
+				},
+				{
+					"name": "2. Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.collectionVariables.set('jwt_token', jsonData.token);",
+									"    console.log('jwt_token set:', jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"student@charusat.edu\",\n    \"password\": \"SecurePass123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": "Authenticates user and returns 1-hour JWT token. Automatically captures jwt_token variable."
+					},
+					"response": []
+				},
+				{
+					"name": "3. Get User Profile (/me)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/me",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"me"
+							]
+						},
+						"description": "Protected route returning the logged-in user's safe identity."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks (Protected)",
+			"item": [
+				{
+					"name": "4. Get All Tasks",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks"
+							]
+						},
+						"description": "Fetches all tasks belonging to the authenticated user."
+					},
+					"response": []
+				},
+				{
+					"name": "5. Create Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"if (jsonData.task && jsonData.task._id) {",
+									"    pm.collectionVariables.set('task_id', jsonData.task._id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Complete Practical 7 Submission\",\n    \"description\": \"Write report and test viva questions\",\n    \"completed\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks"
+							]
+						},
+						"description": "Creates a task with user ownership."
+					},
+					"response": []
+				},
+				{
+					"name": "6. Update Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Practical 7 Verified and Complete\",\n    \"completed\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/{{task_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"{{task_id}}"
+							]
+						},
+						"description": "Updates a task owned by the user."
+					},
+					"response": []
+				},
+				{
+					"name": "7. Delete Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/tasks/{{task_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"{{task_id}}"
+							]
+						},
+						"description": "Deletes a task owned by the user."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

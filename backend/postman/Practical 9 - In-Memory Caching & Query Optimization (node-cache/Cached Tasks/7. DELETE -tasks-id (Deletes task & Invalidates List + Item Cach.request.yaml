@@ -1,0 +1,9 @@
+$kind: http-request
+name: 7. DELETE /tasks/:id (Deletes task & Invalidates List + Item Cache)
+url: "{{base_url}}/tasks/{{task_id}}"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt_token}}"
+order: 5000

@@ -1,0 +1,66 @@
+services:
+  # 1. MongoDB Database Service
+  mongodb:
+    image: mongo:6.0
+    container_name: task_manager_mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: taskmanager
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # 2. Node.js / Express Backend API Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: task_manager_backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: 5000
+      MONGO_URI: mongodb://mongodb:27017/taskmanager
+      JWT_SECRET: p7_task_manager_secure_jwt_secret_key_2026_charusat
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # 3. React Frontend Service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: task_manager_frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_BASE: http://localhost:5000
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+# Networks definition
+networks:
+  app-network:
+    name: app-network
+    driver: bridge
+
+# Volumes definition for MongoDB data persistence
+volumes:
+  mongo_data:
+    name: task_manager_mongo_data

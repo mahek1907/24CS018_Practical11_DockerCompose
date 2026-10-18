@@ -1,0 +1,7 @@
+$kind: collection
+name: Practical 9 - In-Memory Caching & Query Optimization (node-cache)
+description: "Postman Collection for Practical 9: In-Memory Caching with node-cache, Cache Invalidation on write, Single-Task Caching, and Cache Metrics (/debug/cache-stats)."
+variables:
+  base_url: http://localhost:5000
+  jwt_token: ""
+  task_id: ""

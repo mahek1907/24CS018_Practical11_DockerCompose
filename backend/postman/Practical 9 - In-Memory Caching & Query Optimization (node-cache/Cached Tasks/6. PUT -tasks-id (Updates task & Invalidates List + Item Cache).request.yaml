@@ -1,0 +1,18 @@
+$kind: http-request
+name: 6. PUT /tasks/:id (Updates task & Invalidates List + Item Cache)
+url: "{{base_url}}/tasks/{{task_id}}"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+        "title": "Implement Caching in Production - COMPLETED",
+        "completed": true
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt_token}}"
+order: 4000

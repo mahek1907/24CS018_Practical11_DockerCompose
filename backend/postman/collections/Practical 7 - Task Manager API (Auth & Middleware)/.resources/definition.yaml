@@ -1,0 +1,6 @@
+$kind: collection
+description: "Postman Collection for Practical 7: Authentication, JWT tokens, Middleware Pipeline, and Protected Task CRUD."
+variables:
+  base_url: http://localhost:5000
+  jwt_token: ""
+  task_id: ""

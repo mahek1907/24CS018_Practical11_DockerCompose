@@ -1,0 +1,14 @@
+=== CACHED PERFORMANCE BENCHMARK ===
+Test: GET /tasks with node-cache
+Reading 1: 2.28 ms
+Reading 2: 1.95 ms
+Reading 3: 2.05 ms
+Average: 2.09 ms
+Final Stats: {
+  "hits": 5,
+  "misses": 8,
+  "totalRequests": 13,
+  "hitRate": "38.46%",
+  "activeKeys": 2,
+  "defaultTTLSeconds": 60
+}
