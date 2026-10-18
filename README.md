@@ -23,7 +23,30 @@ To containerize a full-stack Task Management application (comprising a React fro
 
 ---
 
-## 2. Project Architecture & Multi-Container Network
+## 2. Features Preserved from Practicals 1–10
+
+This repository directly integrates the progressive codebase developed across Practicals 1 through 10:
+
+- **Practicals 1–4 (Node.js & Express Fundamentals):**
+  - Modular Express routing, structured controllers, static serving, and request lifecycle handling.
+- **Practical 5 & 6 (React Frontend UI):**
+  - Full single-page React frontend built with Vite, CSS design, responsive layout, task cards, create/update modals, and state management.
+- **Practical 7 (JWT Authentication & Middleware Pipeline):**
+  - User registration (`POST /register`), password hashing with bcryptjs (10 salt rounds), login (`POST /login`), JWT token generation and verification middleware (`Bearer <token>`), and request validation (`middleware/validate.js`).
+- **Practical 8 (Lazy Loading & Optimization):**
+  - Zero-overhead lean queries (`.lean()`) and compound MongoDB index (`{ userId: 1, createdAt: -1 }`).
+- **Practical 9 (In-Memory Caching with `node-cache`):**
+  - In-memory cache layer in `config/cache.js` caching `GET /tasks` (User list cache) and `GET /tasks/:id` (Single task cache) with automatic cache invalidation on task mutations (`POST`, `PUT`, `DELETE`).
+  - Cache statistics and hit/miss monitoring via `GET /debug/cache-stats` and reset endpoint `POST /tasks/cache/reset`.
+- **Practical 10 (Asynchronous Event-Driven Architecture):**
+  - Native Node.js `EventEmitter` singleton (`events.js`) and decoupled listeners (`listeners.js`).
+  - `POST /tasks` returns HTTP `201 Created` in ~10 ms, emitting `task-created` which completes background notification dispatch asynchronously after a 2-second delay.
+  - `DELETE /tasks/:id` emits `task-deleted` for background cleanup and audit logging.
+  - Resilient error handling via `task-notification-error` preventing uncaught exceptions from terminating the server.
+
+---
+
+## 3. Project Architecture & Multi-Container Network
 
 ```
                                   Client Browser
